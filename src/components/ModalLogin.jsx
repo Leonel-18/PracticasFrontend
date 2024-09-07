@@ -29,7 +29,7 @@ export const ModalLogin = ({ abierto, onClose }) => {
       onClose();
 
       // Redirigir a la página de usuarios después del login exitoso
-      navigate('/usuario');
+      navigate('/menu');
     } catch (error) {
       setError('Email o clave incorrectos');
       console.error('Error durante el login:', error);

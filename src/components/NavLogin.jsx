@@ -11,6 +11,8 @@ import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import Modal from "../components/Modal";
+import { ModalLogin } from "../components/ModalLogin"; // Asegúrate de importar correctamente
 import { useNavigate } from 'react-router-dom';
 
 
@@ -54,13 +56,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const Nav = () => {
+export const NavLogin = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const navigate = useNavigate();
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const cerrarModal = () => setIsOpen(false);
+  const cerrarModalLogin = () => setIsLoginOpen(false);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -106,40 +111,8 @@ const handleCerrarSession = () => {
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Perfil</p>
-      </MenuItem>
-    </Menu>
-  );
-
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box className="mb-[200px]" sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
           <Typography
@@ -151,36 +124,25 @@ const handleCerrarSession = () => {
             Burgery
           </Typography>
 
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
+            <button
+              className="bg-blue-800 ml-4 px-[10px] py-[6px] rounded-md "
+              onClick={() => setIsLoginOpen(true)}
             >
-              <AccountCircle />
-            </IconButton>
+              Login
+            </button>
+            <button
+              className="bg-blue-800 ml-4 px-[10px] py-[6px] rounded-md"
+              onClick={() => setIsOpen(true)}
+            >
+              Registrarse
+            </button>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="show more"
-              aria-controls={mobileMenuId}
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
               color="inherit"
@@ -190,7 +152,8 @@ const handleCerrarSession = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
+      <Modal abierto={isOpen} onClose={cerrarModal} />
+      <ModalLogin abierto={isLoginOpen} onClose={cerrarModalLogin} />
       {renderMenu}
     </Box>
   );
